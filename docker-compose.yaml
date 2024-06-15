@@ -1,0 +1,31 @@
+# Docker compose para executar PostgreSQL & Adminer
+
+networks:
+  PostgreSQL_rede:
+    name: PostgreSQL_rede
+    driver: bridge
+
+volumes:
+  PostgreSQL_data:
+
+services:
+
+  db:
+    container_name: db
+    image: postgres:16.2-alpine3.19
+    environment:
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - PostgreSQL_data:/var/lib/postgresql/data
+    networks:
+      - PostgreSQL_rede
+
+  db-adminer:
+    container_name: db_adminer
+    image: adminer:4.8.1
+    ports:
+      - 8080:8080
+    networks:
+      - PostgreSQL_rede
+    depends_on:
+      - db
